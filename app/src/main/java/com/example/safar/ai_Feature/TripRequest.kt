@@ -1,4 +1,4 @@
-package com.example.veezar.ai_Feature
+package com.example.safar.ai_Feature
 
 data class TripRequest(
     val budget: String,

@@ -1,4 +1,4 @@
-package com.example.veezar.screens
+package com.example.safar.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -15,10 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.veezar.R
-import com.example.veezar.components.BottomAppComposable
-import com.example.veezar.components.SearchBox
-import com.example.veezar.components.TravelCards
+import com.example.safar.R
+import com.example.safar.components.BottomAppComposable
+import com.example.safar.components.SearchBox
+import com.example.safar.components.TravelCards
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -42,7 +42,7 @@ fun HomeScreen(navController: NavController) {
                 modifier = Modifier.padding(start = 30.dp, top = 30.dp, end = 30.dp),
                 horizontalAlignment = Alignment.Start
             ) {
-           com.example.veezar.components.ProfileHeader(
+           com.example.safar.components.ProfileHeader(
     profileImageUrl = profileImageUrl,
     username = username
 )
@@ -70,18 +70,18 @@ SearchBox(
                 ) {
                     TravelCards(
                         drawable = R.drawable.tajmahal,
-                        head = R.string.taj_mahal2,
-                        description = R.string.wonder2
+                        head = stringResource(id = R.string.taj_mahal2),
+                        description = stringResource(id = R.string.wonder2)
                     )
                     TravelCards(
                         drawable = R.drawable.download,
-                        head = R.string.taj_mahal,
-                        description = R.string.wonder
+                        head = stringResource(id = R.string.taj_mahal),
+                        description = stringResource(id = R.string.wonder)
                     )
                     TravelCards(
-                        drawable = R.drawable.download,
-                        head = R.string.taj_mahal2,
-                        description =  R.string.wonder
+                        drawable = R.drawable.tajmahal,
+                        head = stringResource(id = R.string.taj_mahal2),
+                        description = stringResource(id = R.string.wonder)
                     )
                 }
             }

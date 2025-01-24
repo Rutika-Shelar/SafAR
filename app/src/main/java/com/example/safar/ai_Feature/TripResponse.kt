@@ -1,4 +1,4 @@
-package com.example.veezar.ai_Feature
+package com.example.safar.ai_Feature
 
 import com.google.gson.annotations.SerializedName
 

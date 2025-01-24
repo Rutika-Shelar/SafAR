@@ -1,4 +1,4 @@
-package com.example.veezar.ai_Feature
+package com.example.safar.ai_Feature
 
 import android.util.Log
 import androidx.compose.foundation.Image

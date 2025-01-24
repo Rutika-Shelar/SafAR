@@ -1,4 +1,4 @@
-package com.example.veezar.screens
+package com.example.safar.screens
 
 import android.app.Activity
 import android.widget.Toast
@@ -18,8 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.veezar.R
-import com.example.veezar.components.*
+import com.example.safar.R
+import com.example.safar.components.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth

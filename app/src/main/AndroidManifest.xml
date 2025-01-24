@@ -17,8 +17,8 @@
         android:theme="@style/Theme.SafAR"
         tools:targetApi="31">
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCIq3y46uKmMEREQKtS9MOlpa4DizOdN4E" />
+           android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".MainActivity"

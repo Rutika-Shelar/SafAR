@@ -1,6 +1,6 @@
-package com.example.veezar.components
+package com.example.safar.components
 
-import androidx.annotation.DrawableRes
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -31,11 +32,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.example.veezar.R
+import com.example.safar.R
 
 @Composable
 fun SmallTextComposable(value: String, modifier: Modifier = Modifier) {
@@ -60,7 +62,7 @@ fun SmallTextComposable(value: String, modifier: Modifier = Modifier) {
 @Composable
 fun CardDescription(value: String) {
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(8.dp,0.dp,0.dp,0.dp),
         contentAlignment = Alignment.TopStart) {
         Text(
             text = value,
@@ -77,32 +79,11 @@ fun CardDescription(value: String) {
     }
 }
 
-@Composable
-fun NormalTextComposable(value: String, modifier: Modifier) {
-    Box(
-        modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.TopStart
-    ) {
-        Text(
-            text = value,
-            style = TextStyle(
-                fontSize = 24.sp,
-                lineHeight = 28.sp,
-                fontFamily = FontFamily(Font(R.font.manrope)),
-                fontWeight = FontWeight(700),
-                color = Color(0xFF0D141C),
-            ),
-            modifier = Modifier
-                .heightIn(min = 40.dp),
-            color = colorResource(id = R.color.black),
-        )
-    }
-}
 
 @Composable
 fun CardHeading(value: String) {
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(8.dp,0.dp,0.dp,0.dp),
         contentAlignment = Alignment.TopStart
     ) {
         Text(
@@ -308,35 +289,54 @@ fun SearchBox(onSearch: (String) -> Unit, placeholder: String) {
         )
     }
 }
+
 @Composable
-fun TravelCards(
-    @DrawableRes drawable: Int,
-     head: Int,
-    description: Int,
-    modifier: Modifier = Modifier
-) {
+fun TravelCards(drawable: Int, head: String, description: String){
     Card(
-        onClick = { /*TODO*/ },
-        modifier = modifier
-            .background(Color.White)
-            .padding(12.dp)
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
     ) {
-        Column(
-            modifier = modifier.background(Color.White)
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(390.dp)
+                .width(260.dp)
         ) {
+            // Background Image
+            val image: Painter = painterResource(drawable)
             Image(
-                painter = painterResource(drawable),
+                painter = image,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
+                    .fillMaxSize()
             )
-            CardHeading(stringResource(head))
-            CardDescription(stringResource(description))
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(16.dp)
+                    .background(Color.White, RoundedCornerShape(16.dp)),
+            ) {
+                CardHeading(head)
+                CardDescription(description)
+            }
         }
     }
 }
-
+@Preview(showBackground = true)
+@Composable
+fun TravelCardsPreview() {
+    TravelCards(
+        drawable = R.drawable.tajmahal,
+        head = stringResource(id = R.string.taj_mahal2),
+        description = stringResource(id = R.string.wonder2)
+    )
+}
 @Composable
 fun BottomAppComposable(navController: NavController) {
     BottomAppBar(

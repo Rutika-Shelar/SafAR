@@ -1,4 +1,4 @@
-package com.example.veezar.ai_Feature
+package com.example.safar.ai_Feature
 
 fun cleanMarkdownContent(input: String): String {
     val boldPattern = Regex("\\*\\*(.*?)\\*\\*") // Matches bold text **like this**

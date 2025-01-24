@@ -1,4 +1,4 @@
-package com.example.veezar.components
+package com.example.safar.components
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

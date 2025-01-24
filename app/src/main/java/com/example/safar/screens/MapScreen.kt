@@ -1,4 +1,4 @@
-package com.example.veezar.screens
+package com.example.safar.screens
 
 import android.location.Geocoder
 import android.os.Bundle
@@ -12,7 +12,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
-import com.google.android.gms. maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -60,7 +59,7 @@ fun MapScreen(navController: NavController, location: String) {
                 mapView.getMapAsync { googleMap ->
                     val latLng = LatLng(address.latitude, address.longitude)
                     googleMap.addMarker(MarkerOptions().position(latLng).title(location))
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+                    googleMap.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                 }
             } else {
                 Log.e("MapScreen", "No address found for location: $location")

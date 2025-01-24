@@ -1,4 +1,4 @@
-package com.example.veezar.screens
+package com.example.safar.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.example.veezar.R
+import com.example.safar.R
 import com.google.firebase.auth.FirebaseAuth
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

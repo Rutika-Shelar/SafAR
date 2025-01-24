@@ -1,3 +1,39 @@
 <resources>
     <string name="app_name">SafAR</string>
+    <string name="google_maps_key">"AIzaSyCIq3y46uKmMEREQKtS9MOlpa4DizOdN4E"</string>
+
+
+    <string name="Travel_any_where">Travel to Anywhere with Us</string>
+    <string name="loading">Loading…</string>
+    <string name="create">Create an Account</string>
+    <string name="travel">Where would \n you like to visit ?</string>
+
+
+
+    <string name="no_internet_connection">No internet connection!</string>
+    <string name="lbl_email">Email</string>
+    <string name="msg_already_have_an">Already have an account? Log in</string>
+    <string name="msg_do_not_have_an">Already have an account? Sign up</string>
+    <string name="default_web_client_id">300089292229-h79fj9iq08sr6hvk4rmfdpjusdaeakkd.apps.googleusercontent.com</string>
+    <string name="msg_or_connect_with">Or connect with </string>
+    <string name="msg_continue_with_email">Continue with Email</string>
+    <string name="msg_travel_to_anywhere">Travel to Anywhere with Us</string>
+    <string name="msg_by_signing_up_you">By signing up, you agree to our Terms of Service and Privacy Policy.</string>
+    <string name="lbl_password">Password</string>
+
+    <string name="sign_up">Sign Up</string>
+    <string name="new_account">New Account</string>
+    <string name="full_name">Full Name</string>
+    <string name="mobile_nu">Mobile Number</string>
+    <string name="where_to">where to…</string>
+    <string name="ab1_inversions">great\n</string>
+
+    <string name="taj_mahal"> Taj Mahal , India</string>
+    <string name="wonder">  Wonder of world</string>
+    <string name="login">login</string>
+    <string name="title_activity_ai_main">AI_MainActivity</string>
+
+    <string name="tile">Where would \n you like to visit ?</string>
+    <string name="taj_mahal2">HawaMahal</string>
+    <string name="wonder2">architechure</string>
 </resources>

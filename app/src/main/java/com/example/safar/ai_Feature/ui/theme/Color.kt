@@ -1,4 +1,4 @@
-package com.example.veezar.ai_Feature.ui.theme
+package com.example.safar.ai_Feature.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
