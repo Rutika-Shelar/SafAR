@@ -73,7 +73,7 @@ fun CardDescription(value: String) {
                 fontWeight = FontWeight(700),
             ),
             modifier = Modifier
-                .heightIn(min = 40.dp),
+                .heightIn(min = 20.dp),
             color = colorResource(id = R.color.blue),
         )
     }

@@ -28,8 +28,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
 
 @Composable
@@ -165,13 +167,28 @@ fun SettingOption(text: String, onClick: () -> Unit) {
 @Composable
 fun EditProfileDialog(user: FirebaseUser?, onDismiss: () -> Unit, onSave: (Uri?, String) -> Unit) {
     var newDescription by remember { mutableStateOf("") }
-    var newProfileImageUri by remember { mutableStateOf<Uri?>(null) }
+    var newProfileImageUri by remember { mutableStateOf<Uri?>(user?.photoUrl) }
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         newProfileImageUri = uri
+    }
+
+
+    LaunchedEffect(user) {
+        user?.let {
+            Firebase.firestore.collection("users").document(it.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    newDescription = document.getString("description") ?: ""
+                    val profileImageUrl = document.getString("profileImageUrl")
+                    profileImageUrl?.let { url ->
+                        newProfileImageUri = Uri.parse(url)
+                    }
+                }
+        }
     }
 
     AlertDialog(

@@ -70,17 +70,17 @@ SearchBox(
                 ) {
                     TravelCards(
                         drawable = R.drawable.tajmahal,
-                        head = stringResource(id = R.string.taj_mahal2),
-                        description = stringResource(id = R.string.wonder2)
-                    )
-                    TravelCards(
-                        drawable = R.drawable.download,
                         head = stringResource(id = R.string.taj_mahal),
                         description = stringResource(id = R.string.wonder)
                     )
                     TravelCards(
-                        drawable = R.drawable.tajmahal,
+                        drawable = R.drawable.download,
                         head = stringResource(id = R.string.taj_mahal2),
+                        description = stringResource(id = R.string.wonder2)
+                    )
+                    TravelCards(
+                        drawable = R.drawable.tajmahal,
+                        head = stringResource(id = R.string.taj_mahal),
                         description = stringResource(id = R.string.wonder)
                     )
                 }
