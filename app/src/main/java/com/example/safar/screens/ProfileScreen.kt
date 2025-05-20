@@ -23,51 +23,25 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.safar.R
 import com.google.firebase.auth.FirebaseAuth
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.FirebaseStorage
 
 @Composable
 fun ProfileScreen(navController: NavHostController) {
     val user = FirebaseAuth.getInstance().currentUser
-    ProfileContent(navController, user)
+    if (user == null) {
+
+        navController.navigate("login") {
+            popUpTo("profile") { inclusive = true }
+        }
+    } else {
+        ProfileContent(navController, user)
+    }
 }
 
 @Composable
-fun ProfileContent(navController: NavController, user: FirebaseUser?) {
+fun ProfileContent(navController: NavController, user: FirebaseUser) {
     var showDialog by remember { mutableStateOf(false) }
-    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
-    var description by remember { mutableStateOf("") }
     val context = LocalContext.current
-
-    LaunchedEffect(user) {
-        user?.uid?.let { userId ->
-            val db = FirebaseFirestore.getInstance()
-            db.collection("users").document(userId).get().addOnSuccessListener { document ->
-                description = document.getString("description") ?: "Nothing"
-            }
-        }
-    }
-
-    if (showDialog) {
-        EditProfileDialog(
-            user = user,
-            onDismiss = { showDialog = false },
-            onSave = { newUri, newDescription ->
-                profileImageUri = newUri
-                description = newDescription
-                updateProfile(user, newUri, newDescription, context)
-                showDialog = false
-            }
-        )
-    }
 
     Column(
         modifier = Modifier
@@ -76,7 +50,7 @@ fun ProfileContent(navController: NavController, user: FirebaseUser?) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = user?.photoUrl?.let { rememberImagePainter(data = it) }
+                painter = user.photoUrl?.let { rememberImagePainter(data = it) }
                     ?: painterResource(id = R.drawable.wallpaper),
                 contentDescription = "Profile Picture",
                 modifier = Modifier
@@ -87,12 +61,12 @@ fun ProfileContent(navController: NavController, user: FirebaseUser?) {
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
-                    text = user?.displayName ?: "Guest",
+                    text = user.displayName ?: "Guest",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = description,
+                    text = user.email ?: "No Email",
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
@@ -140,14 +114,10 @@ fun ProfileContent(navController: NavController, user: FirebaseUser?) {
 
 fun logOut(navController: NavController) {
     val auth = FirebaseAuth.getInstance()
-    val googleSignInClient = GoogleSignIn.getClient(navController.context, GoogleSignInOptions.DEFAULT_SIGN_IN)
-
     auth.signOut()
-    googleSignInClient.signOut().addOnCompleteListener {
-        googleSignInClient.revokeAccess().addOnCompleteListener {
-            Toast.makeText(navController.context, "Logged out successfully", Toast.LENGTH_SHORT).show()
-            navController.navigate("login")
-        }
+    Toast.makeText(navController.context, "Logged out successfully", Toast.LENGTH_SHORT).show()
+    navController.navigate("login") {
+        popUpTo("profile") { inclusive = true }
     }
 }
 
@@ -162,110 +132,4 @@ fun SettingOption(text: String, onClick: () -> Unit) {
         fontSize = 16.sp,
         fontWeight = FontWeight.Medium
     )
-}
-
-@Composable
-fun EditProfileDialog(user: FirebaseUser?, onDismiss: () -> Unit, onSave: (Uri?, String) -> Unit) {
-    var newDescription by remember { mutableStateOf("") }
-    var newProfileImageUri by remember { mutableStateOf<Uri?>(user?.photoUrl) }
-    val context = LocalContext.current
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        newProfileImageUri = uri
-    }
-
-
-    LaunchedEffect(user) {
-        user?.let {
-            Firebase.firestore.collection("users").document(it.uid)
-                .get()
-                .addOnSuccessListener { document ->
-                    newDescription = document.getString("description") ?: ""
-                    val profileImageUrl = document.getString("profileImageUrl")
-                    profileImageUrl?.let { url ->
-                        newProfileImageUri = Uri.parse(url)
-                    }
-                }
-        }
-    }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = "Edit Profile") },
-        text = {
-            Column {
-                TextField(
-                    value = newDescription,
-                    onValueChange = { newDescription = it },
-                    label = { Text("Description") },
-                    isError = newDescription.split(" ").size > 20
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { launcher.launch("image/*") }) {
-                    Text("Select Profile Image")
-                }
-                newProfileImageUri?.let {
-                    Image(
-                        painter = rememberImagePainter(data = it),
-                        contentDescription = "New Profile Image",
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    if (newDescription.split(" ").size <= 20) {
-                        onSave(newProfileImageUri, newDescription)
-                    } else {
-                        Toast.makeText(context, "Description should be 20 words or less", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            ) {
-                Text("Save")
-            }
-        },
-        dismissButton = {
-            Button(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
-}
-
-fun updateProfile(user: FirebaseUser?, newProfileImageUri: Uri?, newDescription: String, context: android.content.Context) {
-    val db = FirebaseFirestore.getInstance()
-    val storage = FirebaseStorage.getInstance()
-    val userId = user?.uid ?: return
-
-    if (newProfileImageUri != null) {
-        val storageRef = storage.reference.child("profile_images/$userId.jpg")
-        storageRef.putFile(newProfileImageUri).addOnSuccessListener {
-            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                db.collection("users").document(userId)
-                    .update("profileImageUrl", uri.toString(), "description", newDescription)
-                    .addOnSuccessListener {
-                        Toast.makeText(context, "Profile updated successfully", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
-                    }
-            }
-        }
-    } else {
-        db.collection("users").document(userId)
-            .update("description", newDescription)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Profile updated successfully", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
-            }
-    }
 }

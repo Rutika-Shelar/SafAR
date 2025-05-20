@@ -1,4 +1,4 @@
-package com.example.safar.ai_Feature.ui.theme
+package com.example.safar.theme
 
 import android.app.Activity
 import android.os.Build

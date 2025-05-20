@@ -1,6 +1,7 @@
 package com.example.safar.components
 
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -339,6 +341,8 @@ fun TravelCardsPreview() {
 }
 @Composable
 fun BottomAppComposable(navController: NavController) {
+    val context = LocalContext.current
+
     BottomAppBar(
         containerColor = Color(0xFFE8EDF2),
         modifier = Modifier.background(Color.White),
@@ -363,22 +367,29 @@ fun BottomAppComposable(navController: NavController) {
                     tint = Color(0xFF4F7396)
                 )
             }
-//            IconButton(onClick = { /*TODO*/ }) {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.inbox),
-//                    contentDescription = null,
-//                    tint = Color(0xFF4F7396)
-//                )
-//            }
+
+            IconButton(onClick = {
+                val intent = context.packageManager.getLaunchIntentForPackage("com.dmbfm.MapboxRoutes")
+                if (intent != null) {
+                    context.startActivity(intent)
+                } else {
+                    Toast.makeText(context, "App not found", Toast.LENGTH_SHORT).show()
+                }
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.inbox),
+                    contentDescription = null,
+                    tint = Color(0xFF4F7396)
+                )
+            }
+
             IconButton(onClick = { navController.navigate("profile") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.profile),
                     contentDescription = null,
                     tint = Color(0xFF4F7396)
                 )
-
             }
         }
     }
 }
-
