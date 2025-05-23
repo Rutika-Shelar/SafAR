@@ -1,5 +1,6 @@
 package com.example.safar
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,11 +27,20 @@ class MainActivity : ComponentActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
+
+        val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false)
+        val startDestination = if (isLoggedIn) "home" else "login"
+
         setContent {
             MaterialTheme {
                 Surface {
                     val navController = rememberNavController()
-                    AppNavGraph(navController = navController, googleSignInClient = googleSignInClient)
+                    AppNavGraph(
+                        navController = navController,
+                        startDestination = startDestination,
+                        googleSignInClient = googleSignInClient
+                    )
                 }
             }
         }

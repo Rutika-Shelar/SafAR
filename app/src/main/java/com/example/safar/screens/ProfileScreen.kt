@@ -1,5 +1,6 @@
 package com.example.safar.screens
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,7 +30,6 @@ import com.google.firebase.auth.FirebaseUser
 fun ProfileScreen(navController: NavHostController) {
     val user = FirebaseAuth.getInstance().currentUser
     if (user == null) {
-
         navController.navigate("login") {
             popUpTo("profile") { inclusive = true }
         }
@@ -40,7 +40,6 @@ fun ProfileScreen(navController: NavHostController) {
 
 @Composable
 fun ProfileContent(navController: NavController, user: FirebaseUser) {
-    var showDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Column(
@@ -75,7 +74,7 @@ fun ProfileContent(navController: NavController, user: FirebaseUser) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { showDialog = true },
+            onClick = { navController.navigate("editProfile") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
@@ -92,9 +91,9 @@ fun ProfileContent(navController: NavController, user: FirebaseUser) {
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 8.dp)
         )
-
         SettingOption(text = "Personal information", onClick = { navController.navigate("personalInfo") })
         SettingOption(text = "Notifications", onClick = { navController.navigate("notifications") })
+
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
@@ -103,7 +102,7 @@ fun ProfileContent(navController: NavController, user: FirebaseUser) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    logOut(navController)
+                    logOut(navController, context)
                 }
                 .padding(vertical = 16.dp),
             textAlign = TextAlign.Center,
@@ -112,10 +111,15 @@ fun ProfileContent(navController: NavController, user: FirebaseUser) {
     }
 }
 
-fun logOut(navController: NavController) {
+fun logOut(navController: NavController, context: Context) {
     val auth = FirebaseAuth.getInstance()
     auth.signOut()
-    Toast.makeText(navController.context, "Logged out successfully", Toast.LENGTH_SHORT).show()
+
+    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    sharedPreferences.edit().putBoolean("is_logged_in", false).apply()
+
+    Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
+
     navController.navigate("login") {
         popUpTo("profile") { inclusive = true }
     }
